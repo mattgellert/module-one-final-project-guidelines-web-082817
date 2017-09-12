@@ -9,12 +9,12 @@ class Player < ActiveRecord::Base
   end
 
   def make_move(move)
-    # coordinate 53 (x: 5, y: 3)
-    xcoord = move.split("")[0].to_i
-    xid = xcoord - 1
+    # coordinate 53 (y: 5, x: 3)
+    ycoord = move.split("")[0].to_i
+    yid = ycoord - 1
 
-    ycoord = move.split("")[1].to_i
-    yid = ycoord
+    xcoord = move.split("")[1].to_i
+    xid = xcoord
 
     #make a new Move object and check validity
     move = Move.new(xid: xid, yid: yid)

@@ -5,8 +5,8 @@ require_relative '../config/environment'
 
 #INSTRUCTIONS
 puts "Welcome to CLI Othello!!"
-puts "To make a move, enter an x and y coordinate when prompted."
-puts "For example, to place a chip on x:1 y:1 enter: 11"
+puts "To make a move, enter an y and x coordinate when prompted."
+puts "For example, to place a chip on y:1 x:1 enter: 11"
 
 #instantiate a new board'
 Board.destroy_all
@@ -24,7 +24,7 @@ i = 1
   if i.odd?
     puts "Player 1, please enter your move:"
     player = Player.all[-2]
-    #move = xy where x is x coordinate and y is y coordinate
+    #move = yx where x is x coordinate and y is y coordinate
   else
     puts "Player 2, please enter your move:"
     player = Player.all[-1]

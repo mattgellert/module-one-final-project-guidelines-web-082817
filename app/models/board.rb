@@ -4,22 +4,22 @@ class Board < ActiveRecord::Base
   has_many :moves
 
   @@str00 = "    1   2   3   4   5   6   7   8"
-  @@strxx = "   ___ ___ ___ ___ ___ ___ ___ ___"
-  @@strx1 = "1 |   |   |   |   |   |   |   |   "
-  @@strx2 = "2 |   |   |   |   |   |   |   |   "
-  @@strx3 = "3 |   |   |   |   |   |   |   |   "
-  @@strx4 = "4 |   |   |   | 1 | 0 |   |   |   "
-  @@strx5 = "5 |   |   |   | 0 | 1 |   |   |   "
-  @@strx6 = "6 |   |   |   |   |   |   |   |   "
-  @@strx7 = "7 |   |   |   |   |   |   |   |   "
-  @@strx8 = "8 |   |   |   |   |   |   |   |   "
+  @@stryy = "   ___ ___ ___ ___ ___ ___ ___ ___"
+  @@stry1 = "1 |   |   |   |   |   |   |   |   "
+  @@stry2 = "2 |   |   |   |   |   |   |   |   "
+  @@stry3 = "3 |   |   |   |   |   |   |   |   "
+  @@stry4 = "4 |   |   |   | 1 | 0 |   |   |   "
+  @@stry5 = "5 |   |   |   | 0 | 1 |   |   |   "
+  @@stry6 = "6 |   |   |   |   |   |   |   |   "
+  @@stry7 = "7 |   |   |   |   |   |   |   |   "
+  @@stry8 = "8 |   |   |   |   |   |   |   |   "
 
 
   def self.new_board
     #instantiates a row in the boards table for each row on the Othello board
     3.times{self.create}
-    self.create(y1: nil,y2: nil,y3: nil,y4: 1,y5: 0,y6: nil,y7: nil,y8: nil)
-    self.create(y1: nil,y2: nil,y3: nil,y4: 0,y5: 1,y6: nil,y7: nil,y8: nil)
+    self.create(x1: nil,x2: nil,x3: nil,x4: 1,x5: 0,x6: nil,x7: nil,x8: nil)
+    self.create(x1: nil,x2: nil,x3: nil,x4: 0,x5: 1,x6: nil,x7: nil,x8: nil)
     3.times{self.create}
   end
 
@@ -33,64 +33,64 @@ class Board < ActiveRecord::Base
       chip = " 1 "
     end
 
-    #get the string associated with xid
-    case xid
+    #get the string associated with yid
+    case yid
       when 0
-        arr = @@strx1.split("|")
-        arr[yid] = chip
-        @@strx1 = arr.join("|")
+        arr = @@stry1.split("|")
+        arr[xid] = chip
+        @@stry1 = arr.join("|")
       when 1
-        arr = @@strx2.split("|")
-        arr[yid] = chip
-        @@strx2 = arr.join("|")
+        arr = @@stry2.split("|")
+        arr[xid] = chip
+        @@stry2 = arr.join("|")
       when 2
-        arr = @@strx3.split("|")
-        arr[yid] = chip
-        @@strx3 = arr.join("|")
+        arr = @@stry3.split("|")
+        arr[xid] = chip
+        @@stry3 = arr.join("|")
       when 3
-        arr = @@strx4.split("|")
-        arr[yid] = chip
-        @@strx4 = arr.join("|")
+        arr = @@stry4.split("|")
+        arr[xid] = chip
+        @@stry4 = arr.join("|")
       when 4
-        arr = @@strx5.split("|")
-        arr[yid] = chip
-        @@strx5 = arr.join("|")
+        arr = @@stry5.split("|")
+        arr[xid] = chip
+        @@stry5 = arr.join("|")
       when 5
-        arr = @@strx6.split("|")
-        arr[yid] = chip
-        @@strx6 = arr.join("|")
+        arr = @@stry6.split("|")
+        arr[xid] = chip
+        @@stry6 = arr.join("|")
       when 6
-        arr = @@strx7.split("|")
-        arr[yid] = chip
-        @@strx7 = arr.join("|")
+        arr = @@stry7.split("|")
+        arr[xid] = chip
+        @@stry7 = arr.join("|")
       when 7
-        arr = @@strx8.split("|")
-        arr[yid] = chip
-        @@strx8 = arr.join("|")
+        arr = @@stry8.split("|")
+        arr[xid] = chip
+        @@stry8 = arr.join("|")
     end
-    #split the string on '|' change element yid
+    #split the string on '|' change element xid
   end
 
   def self.display_board
     #puts the board to the terminal
     puts @@str00
-    puts @@strxx
-    puts @@strx1
-    puts @@strxx
-    puts @@strx2
-    puts @@strxx
-    puts @@strx3
-    puts @@strxx
-    puts @@strx4
-    puts @@strxx
-    puts @@strx5
-    puts @@strxx
-    puts @@strx6
-    puts @@strxx
-    puts @@strx7
-    puts @@strxx
-    puts @@strx8
-    puts @@strxx
+    puts @@stryy
+    puts @@stry1
+    puts @@stryy
+    puts @@stry2
+    puts @@stryy
+    puts @@stry3
+    puts @@stryy
+    puts @@stry4
+    puts @@stryy
+    puts @@stry5
+    puts @@stryy
+    puts @@stry6
+    puts @@stryy
+    puts @@stry7
+    puts @@stryy
+    puts @@stry8
+    puts @@stryy
   end
 
 end

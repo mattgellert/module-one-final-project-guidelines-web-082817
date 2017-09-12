@@ -13,14 +13,14 @@
 ActiveRecord::Schema.define(version: 20170911221501) do
 
   create_table "boards", force: :cascade do |t|
-    t.integer "y1"
-    t.integer "y2"
-    t.integer "y3"
-    t.integer "y4"
-    t.integer "y5"
-    t.integer "y6"
-    t.integer "y7"
-    t.integer "y8"
+    t.integer "x1"
+    t.integer "x2"
+    t.integer "x3"
+    t.integer "x4"
+    t.integer "x5"
+    t.integer "x6"
+    t.integer "x7"
+    t.integer "x8"
   end
 
   create_table "moves", force: :cascade do |t|
