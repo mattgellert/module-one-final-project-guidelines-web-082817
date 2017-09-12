@@ -6,4 +6,6 @@ ActiveRecord::Base.establish_connection(
   database: 'db/development.db'
 )
 
-require_all 'app'
+require_relative '../app/models/board.rb'
+require_relative '../app/models/move.rb'
+require_relative '../app/models/player.rb'
