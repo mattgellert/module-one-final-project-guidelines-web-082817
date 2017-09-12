@@ -16,21 +16,16 @@ class Player < ActiveRecord::Base
     ycoord = move.split("")[1].to_i
     yid = ycoord
 
-    #get back the row associated with x-id
-    #binding.pry
-    row = Board.find_by(id: Board.first.id + xid)
-    sym = "y#{yid}".to_sym
-    col = row[sym]
-    #binding.pry
+    #make a new Move object and check validity
+    move = Move.new(xid: xid, yid: yid)
+    validity = move.check_move(self)
 
-    if col == nil
-      col = self.id - 1
-      Board.update_board(xid, yid, self)
+    #use execute_move if valid
+    if validity == true
+      move.execute_move(self)
     else
-      puts "There is a chip there."
+      #some logic
     end
-
-
   end
 
 end

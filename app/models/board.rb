@@ -36,7 +36,6 @@ class Board < ActiveRecord::Base
     #get the string associated with xid
     case xid
       when 0
-        binding.pry
         arr = @@strx1.split("|")
         arr[yid] = chip
         @@strx1 = arr.join("|")

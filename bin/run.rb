@@ -8,7 +8,8 @@ puts "Welcome to CLI Othello!!"
 puts "To make a move, enter an x and y coordinate when prompted."
 puts "For example, to place a chip on x:1 y:1 enter: 11"
 
-#instantiate a new board
+#instantiate a new board'
+Board.destroy_all
 Board.new_board
 Board.display_board
 

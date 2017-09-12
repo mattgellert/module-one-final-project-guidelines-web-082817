@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(version: 20170911221501) do
   end
 
   create_table "moves", force: :cascade do |t|
+    t.integer "xid"
+    t.integer "yid"
   end
 
   create_table "players", force: :cascade do |t|
