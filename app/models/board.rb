@@ -25,7 +25,7 @@ class Board < ActiveRecord::Base
 
   def self.update_board(xid, yid, player)
     #updates the board
-
+    binding.pry
     #when player 1, insert 0, when player 2 insert 1
     if player.id == Player.all[-2].id
       chip = " 0 "

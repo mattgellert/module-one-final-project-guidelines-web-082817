@@ -3,25 +3,31 @@ class Move < ActiveRecord::Base
   belongs_to :players
   belongs_to :boards
 
-  def opp_chip_up?(chip_type, opp_chip)
+  def opp_chip_up?(chip_type, opp_chip, player)
     x_check = self.xid
     y_check = self.yid - 1
-    row = Board.find_by(id: Board.first.id + y_check)
+    chip_row = Board.find_by(id: Board.first.id + self.yid)
+    check_row = Board.find_by(id: Board.first.id + y_check)
     sym = "x#{x_check}".to_sym
-    col = row[sym]
+    col = check_row[sym]
     chips_to_change = []
+    chips_to_change << chip_row
 
     until col == chip_type || col == nil
       if col == opp_chip
-        chips_to_change << row
+        chips_to_change << check_row
         y_check -= 1
       end
-      row = Board.find_by(id: Board.first.id + y_check)
-      col = row[sym]
+      check_row = Board.find_by(id: Board.first.id + y_check)
+      col = check_row[sym]
       if col == chip_type
+        chips_to_change.each do |chip|
+          chip.update(sym => chip_type)
+          y_check += 1
+          Board.update_board(x_check, y_check, player)
+        end
         #only enters this IF when there is a sandwich
         #flips chips in change array
-        binding.pry
       end
     end
   end
@@ -46,7 +52,7 @@ class Move < ActiveRecord::Base
           #opp?
             #add chip to chips-to-change array
             #keep checking until nil or outside board (no id)
-    self.opp_chip_up?(chip_type, opp_chip)
+    self.opp_chip_up?(chip_type, opp_chip, player)
     binding.pry
     puts "ho"
 
