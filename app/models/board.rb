@@ -7,7 +7,7 @@ class Board < ActiveRecord::Base
   @@stryy = "   ___ ___ ___ ___ ___ ___ ___ ___"
   @@stry1 = "1 |   |   |   |   |   |   |   |   "
   @@stry2 = "2 |   |   |   |   |   |   |   |   "
-  @@stry3 = "3 |   |   |   |   |   |   |   |   "
+  @@stry3 = "3 |   |   |   |   | 0 |   |   |   "
   @@stry4 = "4 |   |   |   | 1 | 0 |   |   |   "
   @@stry5 = "5 |   |   |   | 0 | 1 |   |   |   "
   @@stry6 = "6 |   |   |   |   |   |   |   |   "
@@ -17,7 +17,16 @@ class Board < ActiveRecord::Base
 
   def self.new_board
     #instantiates a row in the boards table for each row on the Othello board
-    3.times{self.create}
+
+    #regular new board
+    # 3.times{self.create}
+    # self.create(x1: nil,x2: nil,x3: nil,x4: 1,x5: 0,x6: nil,x7: nil,x8: nil)
+    # self.create(x1: nil,x2: nil,x3: nil,x4: 0,x5: 1,x6: nil,x7: nil,x8: nil)
+    # 3.times{self.create}
+
+    #diagonal check tests new board #upper right
+    2.times{self.create}
+    self.create(x1: nil,x2: nil,x3: nil,x4: nil,x5: 0,x6: nil,x7: nil,x8: nil)
     self.create(x1: nil,x2: nil,x3: nil,x4: 1,x5: 0,x6: nil,x7: nil,x8: nil)
     self.create(x1: nil,x2: nil,x3: nil,x4: 0,x5: 1,x6: nil,x7: nil,x8: nil)
     3.times{self.create}
