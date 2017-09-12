@@ -92,7 +92,7 @@ class Move < ActiveRecord::Base
   end
 
   def opp_chip_left?(chip_type, opp_chip, player)
-    x_check = self.xid - 1
+    x_check = self.xid - 1 #minus one for moving left
     y_check = self.yid
     chip_row = Board.find_by(id: Board.first.id + y_check)
     sym_chip = "x#{self.xid}".to_sym
@@ -120,8 +120,143 @@ class Move < ActiveRecord::Base
     end
   end
 
-  def opp_chip_up_right
-    
+  def opp_chip_up_right?(chip_type, opp_chip, player)
+    x_check = self.xid + 1
+    y_check = self.yid - 1
+
+    chip_row = Board.find_by(id: Board.first.id + self.yid) # is y
+    sym_chip = "x#{self.xid}".to_sym # is x
+    chips_to_change = []
+    sym_check = "x#{x_check}".to_sym
+    check_row = Board.find_by(id: Board.first.id + y_check)
+
+    chips_to_change << [chip_row, sym_chip]
+
+    col = check_row[sym_check]
+    until col == chip_type || col == nil
+      if col == opp_chip
+        chips_to_change << [check_row, sym_check]
+        x_check += 1
+        y_check -= 1
+
+      end
+      check_row = Board.find_by(id: Board.first.id + y_check)
+      sym_check = "x#{x_check}".to_sym
+      col = check_row[sym_check]
+      if col == chip_type
+        chips_to_change.each do |chip|
+          chip[0].update(sym_check => chip_type)
+          x_check -= 1
+          y_check += 1
+          Board.update_board(x_check, y_check, player)
+        end
+      end
+    end
+  end
+
+  def opp_chip_up_left?(chip_type, opp_chip, player)
+    x_check = self.xid - 1
+    y_check = self.yid - 1
+
+    chip_row = Board.find_by(id: Board.first.id + self.yid) # is y
+    sym_chip = "x#{self.xid}".to_sym # is x
+    chips_to_change = []
+    sym_check = "x#{x_check}".to_sym
+    check_row = Board.find_by(id: Board.first.id + y_check)
+
+    chips_to_change << [chip_row, sym_chip]
+
+    col = check_row[sym_check]
+    until col == chip_type || col == nil
+      if col == opp_chip
+        chips_to_change << [check_row, sym_check]
+        x_check -= 1
+        y_check -= 1
+
+      end
+      check_row = Board.find_by(id: Board.first.id + y_check)
+      sym_check = "x#{x_check}".to_sym
+      col = check_row[sym_check]
+      if col == chip_type
+
+        chips_to_change.each do |chip|
+          chip[0].update(chip[1] => chip_type)
+          x_check += 1
+          y_check += 1
+          Board.update_board(x_check, y_check, player)
+        end
+      end
+    end
+  end
+
+  def opp_chip_down_right?(chip_type, opp_chip, player)
+    x_check = self.xid + 1
+    y_check = self.yid + 1
+
+    chip_row = Board.find_by(id: Board.first.id + self.yid) # is y
+    sym_chip = "x#{self.xid}".to_sym # is x
+    chips_to_change = []
+    sym_check = "x#{x_check}".to_sym
+    check_row = Board.find_by(id: Board.first.id + y_check)
+
+    chips_to_change << [chip_row, sym_chip]
+
+    col = check_row[sym_check]
+    until col == chip_type || col == nil
+      if col == opp_chip
+        chips_to_change << [check_row, sym_check]
+        x_check += 1
+        y_check += 1
+
+      end
+      check_row = Board.find_by(id: Board.first.id + y_check)
+      sym_check = "x#{x_check}".to_sym
+      col = check_row[sym_check]
+      if col == chip_type
+
+        chips_to_change.each do |chip|
+          chip[0].update(chip[1] => chip_type)
+          x_check -= 1
+          y_check -= 1
+          Board.update_board(x_check, y_check, player)
+        end
+      end
+    end
+  end
+
+  def opp_chip_down_left?(chip_type, opp_chip, player)
+    x_check = self.xid - 1
+    y_check = self.yid + 1
+
+    chip_row = Board.find_by(id: Board.first.id + self.yid) # is y
+    sym_chip = "x#{self.xid}".to_sym # is x
+    chips_to_change = []
+    sym_check = "x#{x_check}".to_sym
+    check_row = Board.find_by(id: Board.first.id + y_check)
+
+    chips_to_change << [chip_row, sym_chip]
+
+    col = check_row[sym_check]
+    until col == chip_type || col == nil
+      if col == opp_chip
+        chips_to_change << [check_row, sym_check]
+        x_check -= 1
+        y_check += 1
+
+      end
+      check_row = Board.find_by(id: Board.first.id + y_check)
+      sym_check = "x#{x_check}".to_sym
+      col = check_row[sym_check]
+      if col == chip_type
+
+        chips_to_change.each do |chip|
+          chip[0].update(chip[1] => chip_type)
+          x_check += 1
+          y_check -= 1
+          Board.update_board(x_check, y_check, player)
+        end
+      end
+    end
   end
 
   def check_move(player)
@@ -132,9 +267,6 @@ class Move < ActiveRecord::Base
       chip_type = 1
       opp_chip = 0
     end
-
-
-    #check proximate boxes for opposite chip
 
     #is there an opp chip in the column?
       #up?
@@ -149,10 +281,12 @@ class Move < ActiveRecord::Base
     self.opp_chip_down?(chip_type, opp_chip, player)
     self.opp_chip_right?(chip_type, opp_chip, player)
     self.opp_chip_left?(chip_type, opp_chip, player)
+    self.opp_chip_up_right?(chip_type, opp_chip, player)
+    self.opp_chip_up_left?(chip_type, opp_chip, player)
+    self.opp_chip_down_right?(chip_type, opp_chip, player)
+    self.opp_chip_down_left?(chip_type, opp_chip, player)
 
-    binding.pry
-    puts "ho"
-
+#COMMENTS
       #down?
         #add chip to chips-to-change array
         #check down one row (loop)
@@ -161,7 +295,6 @@ class Move < ActiveRecord::Base
           #opp?
             #add chip to chips-to-change array
             #keep checking until nil or outside board (no id)
-
     #is there an opp chip in the row?
       #right?
         #add chip to chips-to-change array
@@ -179,7 +312,6 @@ class Move < ActiveRecord::Base
             #keep checking until nil or outside board
           #same?
               #valid -> filp chips -> break loop
-
     #is there an opp chip in the diagonal?
       #upper right?
         #add chip to chips-to-change array
@@ -213,26 +345,7 @@ class Move < ActiveRecord::Base
             #keep checking until nil or outside board
           #same?
             #valid -> filp chips -> break loop
-
-
     #return true if valid, false otherwise
-  end
 
-  def execute_move(player)
-    #valid move is executed
-    row = Board.find_by(id: Board.first.id + self.yid)
-    #first id is always associated with the first row
-    sym = "x#{self.xid}".to_sym
-    col = row[sym]
-
-    if col == nil
-      if player.id == Player.all[-2]
-        col = 0
-      elsif player.id == Player.all[-1]
-        col = 1
-      end
-
-      Board.update_board(self.xid, self.yid, player)
-    end
   end
 end

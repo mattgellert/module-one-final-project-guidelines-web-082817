@@ -18,8 +18,9 @@ Board.display_board
 Player.add_players("Player 1", "Player 2")
 
 #continue game until user specifies they are complete
+move = ""
 i = 1
-# until input == "done"
+until move == "done"
   #
   if i.odd?
     puts "Player 1, please enter your move:"
@@ -32,6 +33,7 @@ i = 1
   move = gets.chomp
   player.make_move(move)
   Board.display_board
+  i += 1
 
   #make move
-# end
+end
