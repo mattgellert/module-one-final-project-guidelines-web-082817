@@ -8,26 +8,30 @@ class Move < ActiveRecord::Base
     y_check = self.yid - 1
     chip_row = Board.find_by(id: Board.first.id + self.yid)
     check_row = Board.find_by(id: Board.first.id + y_check)
-    sym = "x#{x_check}".to_sym
-    col = check_row[sym]
-    chips_to_change = []
-    chips_to_change << chip_row
-
-    until col == chip_type || col == nil
-      if col == opp_chip
-        chips_to_change << check_row
-        y_check -= 1
-      end
-      check_row = Board.find_by(id: Board.first.id + y_check)
+    if check_row != nil
+      sym = "x#{x_check}".to_sym
       col = check_row[sym]
-      if col == chip_type
-        chips_to_change.each do |chip|
-          chip.update(sym => chip_type)
-          y_check += 1
-          Board.update_board(x_check, y_check, player)
+      chips_to_change = []
+      chips_to_change << chip_row
+
+      until col == chip_type || col == nil
+        if col == opp_chip
+          chips_to_change << check_row
+          y_check -= 1
         end
-        #only enters this IF when there is a sandwich
-        #flips chips in change array
+        check_row = Board.find_by(id: Board.first.id + y_check)
+        if check_row != nil
+          col = check_row[sym]
+          if col == chip_type
+            chips_to_change.each do |chip|
+              chip.update(sym => chip_type)
+              y_check += 1
+              Board.update_board(x_check, y_check, player)
+            end
+            #only enters this IF when there is a sandwich
+            #flips chips in change array
+          end
+        end
       end
     end
   end
@@ -38,26 +42,30 @@ class Move < ActiveRecord::Base
     y_check = self.yid + 1
     chip_row = Board.find_by(id: Board.first.id + self.yid)
     check_row = Board.find_by(id: Board.first.id + y_check)
-    sym = "x#{x_check}".to_sym
-    col = check_row[sym]
-    chips_to_change = []
-    chips_to_change << chip_row
-
-    until col == chip_type || col == nil
-      if col == opp_chip
-        chips_to_change << check_row
-        y_check += 1
-      end
-      check_row = Board.find_by(id: Board.first.id + y_check)
+    if check_row != nil
+      sym = "x#{x_check}".to_sym
       col = check_row[sym]
-      if col == chip_type
-        chips_to_change.each do |chip|
-          chip.update(sym => chip_type)
-          y_check -= 1
-          Board.update_board(x_check, y_check, player)
+      chips_to_change = []
+      chips_to_change << chip_row
+
+      until col == chip_type || col == nil
+        if col == opp_chip
+          chips_to_change << check_row
+          y_check += 1
         end
-        #only enters this IF when there is a sandwich
-        #flips chips in change array
+        check_row = Board.find_by(id: Board.first.id + y_check)
+        if check_row != nil
+          col = check_row[sym]
+          if col == chip_type
+            chips_to_change.each do |chip|
+              chip.update(sym => chip_type)
+              y_check -= 1
+              Board.update_board(x_check, y_check, player)
+            end
+            #only enters this IF when there is a sandwich
+            #flips chips in change array
+          end
+        end
       end
     end
   end
@@ -129,26 +137,30 @@ class Move < ActiveRecord::Base
     chips_to_change = []
     sym_check = "x#{x_check}".to_sym
     check_row = Board.find_by(id: Board.first.id + y_check)
+    if check_row != nil
 
-    chips_to_change << [chip_row, sym_chip]
+      chips_to_change << [chip_row, sym_chip]
 
-    col = check_row[sym_check]
-    until col == chip_type || col == nil
-      if col == opp_chip
-        chips_to_change << [check_row, sym_check]
-        x_check += 1
-        y_check -= 1
-
-      end
-      check_row = Board.find_by(id: Board.first.id + y_check)
-      sym_check = "x#{x_check}".to_sym
       col = check_row[sym_check]
-      if col == chip_type
-        chips_to_change.each do |chip|
-          chip[0].update(sym_check => chip_type)
-          x_check -= 1
-          y_check += 1
-          Board.update_board(x_check, y_check, player)
+      until col == chip_type || col == nil
+        if col == opp_chip
+          chips_to_change << [check_row, sym_check]
+          x_check += 1
+          y_check -= 1
+
+        end
+        check_row = Board.find_by(id: Board.first.id + y_check)
+        if check_row != nil
+          sym_check = "x#{x_check}".to_sym
+          col = check_row[sym_check]
+          if col == chip_type
+            chips_to_change.each do |chip|
+              chip[0].update(sym_check => chip_type)
+              x_check -= 1
+              y_check += 1
+              Board.update_board(x_check, y_check, player)
+            end
+          end
         end
       end
     end
@@ -163,27 +175,31 @@ class Move < ActiveRecord::Base
     chips_to_change = []
     sym_check = "x#{x_check}".to_sym
     check_row = Board.find_by(id: Board.first.id + y_check)
+    if check_row != nil
 
-    chips_to_change << [chip_row, sym_chip]
+      chips_to_change << [chip_row, sym_chip]
 
-    col = check_row[sym_check]
-    until col == chip_type || col == nil
-      if col == opp_chip
-        chips_to_change << [check_row, sym_check]
-        x_check -= 1
-        y_check -= 1
-
-      end
-      check_row = Board.find_by(id: Board.first.id + y_check)
-      sym_check = "x#{x_check}".to_sym
       col = check_row[sym_check]
-      if col == chip_type
+      until col == chip_type || col == nil
+        if col == opp_chip
+          chips_to_change << [check_row, sym_check]
+          x_check -= 1
+          y_check -= 1
 
-        chips_to_change.each do |chip|
-          chip[0].update(chip[1] => chip_type)
-          x_check += 1
-          y_check += 1
-          Board.update_board(x_check, y_check, player)
+        end
+        check_row = Board.find_by(id: Board.first.id + y_check)
+        if check_row != nil
+          sym_check = "x#{x_check}".to_sym
+          col = check_row[sym_check]
+          if col == chip_type
+
+            chips_to_change.each do |chip|
+              chip[0].update(chip[1] => chip_type)
+              x_check += 1
+              y_check += 1
+              Board.update_board(x_check, y_check, player)
+            end
+          end
         end
       end
     end
@@ -198,27 +214,31 @@ class Move < ActiveRecord::Base
     chips_to_change = []
     sym_check = "x#{x_check}".to_sym
     check_row = Board.find_by(id: Board.first.id + y_check)
+    if check_row != nil
 
-    chips_to_change << [chip_row, sym_chip]
+      chips_to_change << [chip_row, sym_chip]
 
-    col = check_row[sym_check]
-    until col == chip_type || col == nil
-      if col == opp_chip
-        chips_to_change << [check_row, sym_check]
-        x_check += 1
-        y_check += 1
-
-      end
-      check_row = Board.find_by(id: Board.first.id + y_check)
-      sym_check = "x#{x_check}".to_sym
       col = check_row[sym_check]
-      if col == chip_type
+      until col == chip_type || col == nil
+        if col == opp_chip
+          chips_to_change << [check_row, sym_check]
+          x_check += 1
+          y_check += 1
 
-        chips_to_change.each do |chip|
-          chip[0].update(chip[1] => chip_type)
-          x_check -= 1
-          y_check -= 1
-          Board.update_board(x_check, y_check, player)
+        end
+        check_row = Board.find_by(id: Board.first.id + y_check)
+        if check_row != nil
+          sym_check = "x#{x_check}".to_sym
+          col = check_row[sym_check]
+          if col == chip_type
+
+            chips_to_change.each do |chip|
+              chip[0].update(chip[1] => chip_type)
+              x_check -= 1
+              y_check -= 1
+              Board.update_board(x_check, y_check, player)
+            end
+          end
         end
       end
     end
@@ -233,27 +253,31 @@ class Move < ActiveRecord::Base
     chips_to_change = []
     sym_check = "x#{x_check}".to_sym
     check_row = Board.find_by(id: Board.first.id + y_check)
+    if check_row != nil
 
-    chips_to_change << [chip_row, sym_chip]
+      chips_to_change << [chip_row, sym_chip]
 
-    col = check_row[sym_check]
-    until col == chip_type || col == nil
-      if col == opp_chip
-        chips_to_change << [check_row, sym_check]
-        x_check -= 1
-        y_check += 1
-
-      end
-      check_row = Board.find_by(id: Board.first.id + y_check)
-      sym_check = "x#{x_check}".to_sym
       col = check_row[sym_check]
-      if col == chip_type
+      until col == chip_type || col == nil
+        if col == opp_chip
+          chips_to_change << [check_row, sym_check]
+          x_check -= 1
+          y_check += 1
 
-        chips_to_change.each do |chip|
-          chip[0].update(chip[1] => chip_type)
-          x_check += 1
-          y_check -= 1
-          Board.update_board(x_check, y_check, player)
+        end
+        check_row = Board.find_by(id: Board.first.id + y_check)
+        if check_row != nil
+          sym_check = "x#{x_check}".to_sym
+          col = check_row[sym_check]
+          if col == chip_type
+
+            chips_to_change.each do |chip|
+              chip[0].update(chip[1] => chip_type)
+              x_check += 1
+              y_check -= 1
+              Board.update_board(x_check, y_check, player)
+            end
+          end
         end
       end
     end
