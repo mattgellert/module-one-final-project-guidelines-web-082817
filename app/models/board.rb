@@ -2,16 +2,16 @@ class Board < ActiveRecord::Base
   has_many :players
   has_many :moves
 
-  @@str00 = "    1   2   3   4   5   6   7   8"
-  @@stryy = "   ___ ___ ___ ___ ___ ___ ___ ___"
-  @@stry1 = "1 |   |   |   |   |   |   |   |   "
-  @@stry2 = "2 |   |   |   |   |   |   |   |   "
-  @@stry3 = "3 |   |   |   |   |   |   |   |   "
-  @@stry4 = "4 |   |   |   | 1 | 0 |   |   |   "
-  @@stry5 = "5 |   |   |   | 0 | 1 |   |   |   "
-  @@stry6 = "6 |   |   |   |   |   |   |   |   "
-  @@stry7 = "7 |   |   |   |   |   |   |   |   "
-  @@stry8 = "8 |   |   |   |   |   |   |   |   "
+  @@str00 = "         1   2   3   4   5   6   7   8"
+  @@stryy = "        ___ ___ ___ ___ ___ ___ ___ ___"
+  @@stry1 = "     1 |   |   |   |   |   |   |   |   "
+  @@stry2 = "     2 |   |   |   |   |   |   |   |   "
+  @@stry3 = "     3 |   |   |   |   |   |   |   |   "
+  @@stry4 = "     4 |   |   |   | 1 | 0 |   |   |   "
+  @@stry5 = "     5 |   |   |   | 0 | 1 |   |   |   "
+  @@stry6 = "     6 |   |   |   |   |   |   |   |   "
+  @@stry7 = "     7 |   |   |   |   |   |   |   |   "
+  @@stry8 = "     8 |   |   |   |   |   |   |   |   "
 
 
   def self.new_board
@@ -60,6 +60,14 @@ class Board < ActiveRecord::Base
   end
 
   def self.display_board
+    puts "             _   _          _ _     "
+    puts "            | | | |        | | |      "
+    puts "        ___ | |_| |__   ___| | | ___  "
+    puts "       / _ \\\| __| '_ \\ / _ \\ | |/ _ \\ "
+    puts "      | (_) | |_| | | |  __/ | | (_) |"
+    puts "       \\___/ \\__|_| |_|\\___|_|_|\\___/ "
+    puts "\n"
+    puts "\n"
     puts @@str00
     puts @@stryy
     puts @@stry1

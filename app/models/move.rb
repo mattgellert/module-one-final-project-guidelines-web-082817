@@ -23,11 +23,8 @@ class Move < ActiveRecord::Base
         if check_row != nil
           check_cell = check_row[sym]
           if check_cell == chip_type
-            chips_to_change.reverse.each do |chip|
-              chip.update(sym => chip_type)
-              y_check += 1
-              Board.update_board(x_check, y_check, player)
-            end
+            self.execute_move(type: "up", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check, sym: sym)
+            return true
           end
         end
       end
@@ -55,11 +52,8 @@ class Move < ActiveRecord::Base
         if check_row != nil
           check_cell = check_row[sym]
           if check_cell == chip_type
-            chips_to_change.reverse.each do |chip|
-              chip.update(sym => chip_type)
-              y_check -= 1
-              Board.update_board(x_check, y_check, player)
-            end
+            self.execute_move(type: "down", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check, sym: sym)
+            return true
           end
         end
       end
@@ -84,11 +78,8 @@ class Move < ActiveRecord::Base
       sym_check = "x#{x_check}".to_sym
       check_cell = chip_row[sym_check]
       if check_cell == chip_type
-        chips_to_change.reverse.each do |chip|
-          chip_row.update(chip => chip_type)
-          x_check -= 1
-          Board.update_board(x_check, y_check, player)
-        end
+        self.execute_move(type: "right", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check, row: chip_row)
+        return true
       end
     end
   end
@@ -111,14 +102,8 @@ class Move < ActiveRecord::Base
       sym_check = "x#{x_check}".to_sym
       check_cell = chip_row[sym_check]
       if check_cell == chip_type
-
-        chips_to_change.reverse.each do |chip|
-
-          chip_row.update(chip => chip_type)
-          x_check += 1
-          Board.update_board(x_check, y_check, player)
-
-        end
+        self.execute_move(type: "left", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check, row: chip_row)
+        return true
       end
     end
   end
@@ -149,12 +134,8 @@ class Move < ActiveRecord::Base
           sym_check = "x#{x_check}".to_sym
           check_cell = check_row[sym_check]
           if check_cell == chip_type
-            chips_to_change.reverse.each do |chip|
-              chip[0].update(chip[1] => chip_type)
-              x_check -= 1
-              y_check += 1
-              Board.update_board(x_check, y_check, player)
-            end
+            self.execute_move(type: "up right", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check)
+            return true
           end
         end
       end
@@ -187,12 +168,8 @@ class Move < ActiveRecord::Base
           sym_check = "x#{x_check}".to_sym
           check_cell = check_row[sym_check]
           if check_cell == chip_type
-            chips_to_change.reverse.each do |chip|
-              chip[0].update(chip[1] => chip_type)
-              x_check += 1
-              y_check += 1
-              Board.update_board(x_check, y_check, player)
-            end
+            self.execute_move(type: "up left", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check)
+            return true
           end
         end
       end
@@ -225,12 +202,8 @@ class Move < ActiveRecord::Base
           sym_check = "x#{x_check}".to_sym
           check_cell = check_row[sym_check]
           if check_cell == chip_type
-            chips_to_change.reverse.each do |chip|
-              chip[0].update(chip[1] => chip_type)
-              x_check -= 1
-              y_check -= 1
-              Board.update_board(x_check, y_check, player)
-            end
+            self.execute_move(type: "down right", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check)
+            return true
           end
         end
       end
@@ -263,12 +236,8 @@ class Move < ActiveRecord::Base
           sym_check = "x#{x_check}".to_sym
           check_cell = check_row[sym_check]
           if check_cell == chip_type
-            chips_to_change.reverse.each do |chip|
-              chip[0].update(chip[1] => chip_type)
-              x_check += 1
-              y_check -= 1
-              Board.update_board(x_check, y_check, player)
-            end
+            self.execute_move(type: "down left", chip: chip_type, chips_to_change: chips_to_change, player: player, x_check: x_check, y_check: y_check)
+            return true
           end
         end
       end
@@ -291,14 +260,77 @@ class Move < ActiveRecord::Base
 
   def check_move(player)
     chips = get_chip_types(player)
+    valid = []
 
-    self.opp_chip_up?(chips[:same], chips[:opp], player)
-    self.opp_chip_down?(chips[:same], chips[:opp], player)
-    self.opp_chip_right?(chips[:same], chips[:opp], player)
-    self.opp_chip_left?(chips[:same], chips[:opp], player)
-    self.opp_chip_up_right?(chips[:same], chips[:opp], player)
-    self.opp_chip_up_left?(chips[:same], chips[:opp], player)
-    self.opp_chip_down_right?(chips[:same], chips[:opp], player)
-    self.opp_chip_down_left?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_up?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_down?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_right?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_left?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_up_right?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_up_left?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_down_right?(chips[:same], chips[:opp], player)
+    valid << self.opp_chip_down_left?(chips[:same], chips[:opp], player)
+
+    if valid.include?(true)
+      return true
+    end
+  end
+
+
+  def execute_move(type:, chip:, chips_to_change:, player:, x_check:, y_check:, sym: nil, row: nil)
+    case type
+      when "up"
+        chips_to_change.reverse.each do |change_chip|
+          change_chip.update(sym => chip)
+          y_check += 1
+          Board.update_board(x_check, y_check, player)
+        end
+      when "down"
+        chips_to_change.reverse.each do |change_chip|
+          change_chip.update(sym => chip)
+          y_check -= 1
+          Board.update_board(x_check, y_check, player)
+        end
+      when "right"
+        chips_to_change.reverse.each do |change_chip|
+          row.update(change_chip => chip)
+          x_check -= 1
+          Board.update_board(x_check, y_check, player)
+        end
+      when "left"
+        chips_to_change.reverse.each do |change_chip|
+          row.update(change_chip => chip)
+          x_check += 1
+          Board.update_board(x_check, y_check, player)
+        end
+      when "up right"
+        chips_to_change.reverse.each do |change_chip|
+          change_chip[0].update(change_chip[1] => chip)
+          x_check -= 1
+          y_check += 1
+          Board.update_board(x_check, y_check, player)
+        end
+      when "up left"
+        chips_to_change.reverse.each do |change_chip|
+          change_chip[0].update(change_chip[1] => chip)
+          x_check += 1
+          y_check += 1
+          Board.update_board(x_check, y_check, player)
+        end
+      when "down right"
+        chips_to_change.reverse.each do |change_chip|
+          change_chip[0].update(change_chip[1] => chip)
+          x_check -= 1
+          y_check -= 1
+          Board.update_board(x_check, y_check, player)
+        end
+      when "down left"
+        chips_to_change.reverse.each do |change_chip|
+          change_chip[0].update(change_chip[1] => chip)
+          x_check += 1
+          y_check -= 1
+          Board.update_board(x_check, y_check, player)
+        end
+    end
   end
 end
