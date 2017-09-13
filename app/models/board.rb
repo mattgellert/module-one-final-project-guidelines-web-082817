@@ -1,96 +1,90 @@
-require 'pry'
 class Board < ActiveRecord::Base
   has_many :players
   has_many :moves
 
-  @@str00 = "    1   2   3   4   5   6   7   8"
-  @@strxx = "   ___ ___ ___ ___ ___ ___ ___ ___"
-  @@strx1 = "1 |   |   |   |   |   |   |   |   "
-  @@strx2 = "2 |   |   |   |   |   |   |   |   "
-  @@strx3 = "3 |   |   |   |   |   |   |   |   "
-  @@strx4 = "4 |   |   |   | 1 | 0 |   |   |   "
-  @@strx5 = "5 |   |   |   | 0 | 1 |   |   |   "
-  @@strx6 = "6 |   |   |   |   |   |   |   |   "
-  @@strx7 = "7 |   |   |   |   |   |   |   |   "
-  @@strx8 = "8 |   |   |   |   |   |   |   |   "
+  @@str00 = "         1   2   3   4   5   6   7   8"
+  @@stryy = "        ___ ___ ___ ___ ___ ___ ___ ___"
+  @@stry1 = "     1 |   |   |   |   |   |   |   |   "
+  @@stry2 = "     2 |   |   |   |   |   |   |   |   "
+  @@stry3 = "     3 |   |   |   |   |   |   |   |   "
+  @@stry4 = "     4 |   |   |   | 1 | 0 |   |   |   "
+  @@stry5 = "     5 |   |   |   | 0 | 1 |   |   |   "
+  @@stry6 = "     6 |   |   |   |   |   |   |   |   "
+  @@stry7 = "     7 |   |   |   |   |   |   |   |   "
+  @@stry8 = "     8 |   |   |   |   |   |   |   |   "
 
 
   def self.new_board
-    #instantiates a row in the boards table for each row on the Othello board
     3.times{self.create}
-    self.create(y1: nil,y2: nil,y3: nil,y4: 1,y5: 0,y6: nil,y7: nil,y8: nil)
-    self.create(y1: nil,y2: nil,y3: nil,y4: 0,y5: 1,y6: nil,y7: nil,y8: nil)
+    self.create(x1: nil,x2: nil,x3: nil,x4: 1,x5: 0,x6: nil,x7: nil,x8: nil)
+    self.create(x1: nil,x2: nil,x3: nil,x4: 0,x5: 1,x6: nil,x7: nil,x8: nil)
     3.times{self.create}
   end
 
-  def self.update_board(xid, yid, player)
-    #updates the board
+  def self.set_cell(row, column, chip)
+    arr = row.split("|")
+    arr[column] = chip
+    row = arr.join("|")
+  end
 
-    #when player 1, insert 0, when player 2 insert 1
+  def self.get_chip_type(player)
     if player.id == Player.all[-2].id
       chip = " 0 "
     elsif player.id == Player.all[-1].id
       chip = " 1 "
     end
+    chip
+  end
 
-    #get the string associated with xid
-    case xid
+  def self.update_board(xid, yid, player)
+    chip = self.get_chip_type(player)
+
+    case yid
       when 0
-        arr = @@strx1.split("|")
-        arr[yid] = chip
-        @@strx1 = arr.join("|")
+        @@stry1 = self.set_cell(@@stry1, xid, chip)
       when 1
-        arr = @@strx2.split("|")
-        arr[yid] = chip
-        @@strx2 = arr.join("|")
+        @@stry2 = self.set_cell(@@stry2, xid, chip)
       when 2
-        arr = @@strx3.split("|")
-        arr[yid] = chip
-        @@strx3 = arr.join("|")
+        @@stry3 = self.set_cell(@@stry3, xid, chip)
       when 3
-        arr = @@strx4.split("|")
-        arr[yid] = chip
-        @@strx4 = arr.join("|")
+        @@stry4 = self.set_cell(@@stry4, xid, chip)
       when 4
-        arr = @@strx5.split("|")
-        arr[yid] = chip
-        @@strx5 = arr.join("|")
+        @@stry5 = self.set_cell(@@stry5, xid, chip)
       when 5
-        arr = @@strx6.split("|")
-        arr[yid] = chip
-        @@strx6 = arr.join("|")
+        @@stry6 = self.set_cell(@@stry6, xid, chip)
       when 6
-        arr = @@strx7.split("|")
-        arr[yid] = chip
-        @@strx7 = arr.join("|")
+        @@stry7 = self.set_cell(@@stry7, xid, chip)
       when 7
-        arr = @@strx8.split("|")
-        arr[yid] = chip
-        @@strx8 = arr.join("|")
+        @@stry8 = self.set_cell(@@stry8, xid, chip)
     end
-    #split the string on '|' change element yid
   end
 
   def self.display_board
-    #puts the board to the terminal
+    puts "             _   _          _ _     "
+    puts "            | | | |        | | |      "
+    puts "        ___ | |_| |__   ___| | | ___  "
+    puts "       / _ \\\| __| '_ \\ / _ \\ | |/ _ \\ "
+    puts "      | (_) | |_| | | |  __/ | | (_) |"
+    puts "       \\___/ \\__|_| |_|\\___|_|_|\\___/ "
+    puts "\n"
+    puts "\n"
     puts @@str00
-    puts @@strxx
-    puts @@strx1
-    puts @@strxx
-    puts @@strx2
-    puts @@strxx
-    puts @@strx3
-    puts @@strxx
-    puts @@strx4
-    puts @@strxx
-    puts @@strx5
-    puts @@strxx
-    puts @@strx6
-    puts @@strxx
-    puts @@strx7
-    puts @@strxx
-    puts @@strx8
-    puts @@strxx
+    puts @@stryy
+    puts @@stry1
+    puts @@stryy
+    puts @@stry2
+    puts @@stryy
+    puts @@stry3
+    puts @@stryy
+    puts @@stry4
+    puts @@stryy
+    puts @@stry5
+    puts @@stryy
+    puts @@stry6
+    puts @@stryy
+    puts @@stry7
+    puts @@stryy
+    puts @@stry8
+    puts @@stryy
   end
-
 end
