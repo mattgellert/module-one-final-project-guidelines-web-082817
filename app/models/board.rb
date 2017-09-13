@@ -59,7 +59,23 @@ class Board < ActiveRecord::Base
     end
   end
 
+  def self.get_chip_count
+    chips = []
+    self.all.each do |row|
+      chips << row[:x1]
+      chips << row[:x2]
+      chips << row[:x3]
+      chips << row[:x4]
+      chips << row[:x5]
+      chips << row[:x6]
+      chips << row[:x7]
+      chips << row[:x8]
+    end
+    counts = {zero: chips.count(0), one: chips.count(1)}
+  end
+
   def self.display_board
+    counts = self.get_chip_count
     puts "             _   _          _ _     "
     puts "            | | | |        | | |      "
     puts "        ___ | |_| |__   ___| | | ___  "
@@ -67,6 +83,8 @@ class Board < ActiveRecord::Base
     puts "      | (_) | |_| | | |  __/ | | (_) |"
     puts "       \\___/ \\__|_| |_|\\___|_|_|\\___/ "
     puts "\n"
+    #display the count of 1's and 0's
+    puts "        Player 1: #{counts[:zero]}      Player 2: #{counts[:one]}"
     puts "\n"
     puts @@str00
     puts @@stryy
