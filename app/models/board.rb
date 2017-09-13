@@ -1,4 +1,3 @@
-require 'pry'
 class Board < ActiveRecord::Base
   has_many :players
   has_many :moves
@@ -16,70 +15,51 @@ class Board < ActiveRecord::Base
 
 
   def self.new_board
-    #instantiates a row in the boards table for each row on the Othello board
-
-    #regular new board
-    # 3.times{self.create}
-    # self.create(x1: nil,x2: nil,x3: nil,x4: 1,x5: 0,x6: nil,x7: nil,x8: nil)
-    # self.create(x1: nil,x2: nil,x3: nil,x4: 0,x5: 1,x6: nil,x7: nil,x8: nil)
-    # 3.times{self.create}
-
-    #diagonal check tests new board #upper left
     3.times{self.create}
     self.create(x1: nil,x2: nil,x3: nil,x4: 1,x5: 0,x6: nil,x7: nil,x8: nil)
     self.create(x1: nil,x2: nil,x3: nil,x4: 0,x5: 1,x6: nil,x7: nil,x8: nil)
     3.times{self.create}
   end
 
-  def self.update_board(xid, yid, player)
-    #updates the board
-    #when player 1, insert 0, when player 2 insert 1
+  def self.set_cell(row, column, chip)
+    arr = row.split("|")
+    arr[column] = chip
+    row = arr.join("|")
+  end
+
+  def self.get_chip_type(player)
     if player.id == Player.all[-2].id
       chip = " 0 "
     elsif player.id == Player.all[-1].id
       chip = " 1 "
     end
+    chip
+  end
 
-    #get the string associated with yid
+  def self.update_board(xid, yid, player)
+    chip = self.get_chip_type(player)
+
     case yid
       when 0
-        arr = @@stry1.split("|")
-        arr[xid] = chip
-        @@stry1 = arr.join("|")
+        @@stry1 = self.set_cell(@@stry1, xid, chip)
       when 1
-        arr = @@stry2.split("|")
-        arr[xid] = chip
-        @@stry2 = arr.join("|")
+        @@stry2 = self.set_cell(@@stry2, xid, chip)
       when 2
-        arr = @@stry3.split("|")
-        arr[xid] = chip
-        @@stry3 = arr.join("|")
+        @@stry3 = self.set_cell(@@stry3, xid, chip)
       when 3
-        arr = @@stry4.split("|")
-        arr[xid] = chip
-        @@stry4 = arr.join("|")
+        @@stry4 = self.set_cell(@@stry4, xid, chip)
       when 4
-        arr = @@stry5.split("|")
-        arr[xid] = chip
-        @@stry5 = arr.join("|")
+        @@stry5 = self.set_cell(@@stry5, xid, chip)
       when 5
-        arr = @@stry6.split("|")
-        arr[xid] = chip
-        @@stry6 = arr.join("|")
+        @@stry6 = self.set_cell(@@stry6, xid, chip)
       when 6
-        arr = @@stry7.split("|")
-        arr[xid] = chip
-        @@stry7 = arr.join("|")
+        @@stry7 = self.set_cell(@@stry7, xid, chip)
       when 7
-        arr = @@stry8.split("|")
-        arr[xid] = chip
-        @@stry8 = arr.join("|")
+        @@stry8 = self.set_cell(@@stry8, xid, chip)
     end
-    #split the string on '|' change element xid
   end
 
   def self.display_board
-    #puts the board to the terminal
     puts @@str00
     puts @@stryy
     puts @@stry1
@@ -99,5 +79,4 @@ class Board < ActiveRecord::Base
     puts @@stry8
     puts @@stryy
   end
-
 end
