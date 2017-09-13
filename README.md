@@ -36,3 +36,5 @@ To see the instructions again. Enter 'instructions' when prompted for your move.
 To exit the game after it has begun, type "done" and hit enter.
 
 To begin, type 'start' and hit enter. Good luck!!
+
+For further information on rules and strategy, please refer to the [Wikipedia entry](https://en.wikipedia.org/wiki/Reversi) on Reversi or [this](https://www.youtube.com/watch?v=Ol3Id7xYsY4) instructional video.
