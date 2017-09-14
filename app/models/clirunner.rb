@@ -29,6 +29,8 @@ class CliRunner < InvalidInputError
       puts "\n"
       puts "To exit the game after it has begun, type 'done' and hit enter."
       puts "\n"
+      puts "If you are unable to make any moves, type 'pass' and hit enter."
+      puts "\n"
       puts "To begin, type 'start' and hit enter. Good luck!!"
       input = gets.chomp
       if input != "start"
@@ -71,6 +73,8 @@ class CliRunner < InvalidInputError
       if input == "instructions"
         CliRunner.instructions
         i -= 1
+        break
+      elsif input == "pass"
         break
       end
       valid = player.make_move(input)
