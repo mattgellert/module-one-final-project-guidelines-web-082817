@@ -27,9 +27,11 @@ class CliRunner < InvalidInputError
       puts "\n"
       puts "To see the instructions again. Enter 'instructions' when prompted for your move."
       puts "\n"
-      puts "To exit the game after it has begun, type 'done' and hit enter."
+      puts "If you are unable to make any moves, type 'pass' or 'skip' and hit enter."
       puts "\n"
-      puts "If you are unable to make any moves, type 'pass' and hit enter."
+      puts "If neither player can make a move the game is over."
+      puts "\n"
+      puts "To exit the game after it has begun, type 'done' and hit enter."
       puts "\n"
       puts "To begin, type 'start' and hit enter. Good luck!!"
       input = gets.chomp
@@ -69,17 +71,26 @@ class CliRunner < InvalidInputError
       end
 
       input = gets.chomp
-      break if input == "done"
+      if input != "done" && input != "pass" && input != "skip" && input.scan(/[1-8]{2}/).length == 0
+        begin
+          raise InvalidInputError
+        rescue InvalidInputError => error
+          puts error.move_message
+          sleep (2)
+        end
+        i -= 1
+        break
+      end
+
+      break if input == "done" || input == "pass" || input == "skip"
       if input == "instructions"
         CliRunner.instructions
         i -= 1
         break
-      elsif input == "pass"
-        break
       end
       valid = player.make_move(input)
       #binding.pry
-      if valid == nil
+      if valid == nil # || input != /[12345678][12345678]/
         begin
           raise InvalidInputError
         rescue InvalidInputError => error
@@ -93,4 +104,13 @@ class CliRunner < InvalidInputError
     i += 1
   end
   system "clear"
+
+  counts = Board.get_chip_count
+  if counts[:zero] > counts[:one]
+    Player.all[-2].winner = true
+    puts "The winner is: Player 1!!"
+  else
+    Player.all[-1].winner = true
+    puts "The winner is: Player 2!!"
+  end
 end
