@@ -21,7 +21,7 @@ class CliRunner < InvalidInputError
       puts "\n"
       puts "CAUTION: The move that gets you the most chips may not get you the most in the long run"
       puts "\n"
-      puts "To make a move, enter an y and x coordinate when prompted."
+      puts "To make a move, enter a y and x coordinate when prompted."
       puts "\n"
       puts "For example, to place a chip on y:1 x:3 enter: 13"
       puts "\n"
@@ -64,7 +64,6 @@ class CliRunner < InvalidInputError
       if i.odd?
         puts "     Player 1, please enter your move:"
         player = Player.all[-2]
-        #move = yx where x is x coordinate and y is y coordinate
       else
         puts "     Player 2, please enter your move:"
         player = Player.all[-1]
@@ -89,14 +88,12 @@ class CliRunner < InvalidInputError
         break
       end
       valid = player.make_move(input)
-      #binding.pry
-      if valid == nil # || input != /[12345678][12345678]/
+      if valid == nil
         begin
           raise InvalidInputError
         rescue InvalidInputError => error
           puts error.move_message
         end
-        #display some error message
       end
     end
     system "clear"
@@ -109,6 +106,8 @@ class CliRunner < InvalidInputError
   if counts[:zero] > counts[:one]
     Player.all[-2].winner = true
     puts "The winner is: Player 1!!"
+  elsif counts[:zero] == counts[:one]
+    puts "It's a draw!!"
   else
     Player.all[-1].winner = true
     puts "The winner is: Player 2!!"
