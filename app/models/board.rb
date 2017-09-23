@@ -83,7 +83,6 @@ class Board < ActiveRecord::Base
     puts "      | (_) | |_| | | |  __/ | | (_) |"
     puts "       \\___/ \\__|_| |_|\\___|_|_|\\___/ "
     puts "\n"
-    #display the count of 1's and 0's
     puts "        Player 1: #{counts[:zero]}      Player 2: #{counts[:one]}"
     puts "\n"
     puts @@str00

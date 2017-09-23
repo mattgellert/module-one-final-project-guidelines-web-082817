@@ -1,4 +1,3 @@
-require 'pry'
 class Player < ActiveRecord::Base
 
 

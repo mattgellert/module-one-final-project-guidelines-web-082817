@@ -1,10 +1,6 @@
-require 'pry'
 class Move < ActiveRecord::Base
   belongs_to :players
   belongs_to :boards
-
-  @@directions = [1, -1]
-
 
   def opp_chip_up?(chip_type, opp_chip, player)
     x_check = self.xid
